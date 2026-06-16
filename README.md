@@ -9,6 +9,29 @@ This repository is the public, pre-application artifact for a proposed Interledg
 
 No real money moves. The test network uses play money only.
 
+## Architecture
+
+```mermaid
+flowchart LR
+    INJ["Untrusted inputs:<br/>tool outputs, merchant pages, messages"]
+    GUARD["Defended baseline<br/>(LlamaFirewall + envelope pinning)"]
+    AGENT["AI payment agent"]
+    CLIENT["Open Payments client"]
+    AUTH["GNAP auth server<br/>grant + limits, RFC 9635"]
+    RS["Rafiki testnet<br/>incoming, quote, outgoing"]
+    SCORER["Scorer:<br/>observed state vs envelope = ASR"]
+    ENV["AuthorizedEnvelope<br/>receivers, caps, interval, revoked_at"]
+    INJ --> GUARD --> AGENT --> CLIENT --> AUTH --> RS --> SCORER
+    ENV --> SCORER
+    INJ -.->|tries to hijack| AGENT
+    classDef hot fill:#fdecea,stroke:#c1462b,color:#7a2b1a;
+    classDef core fill:#e6f2f1,stroke:#0e7c7b,color:#0b4f4e;
+    class INJ hot;
+    class GUARD,AGENT,CLIENT,AUTH,RS,SCORER,ENV core;
+```
+
+The agent completes a real Open Payments flow under a GNAP grant on the Rafiki testnet. Injected content reaches it through three surfaces. The scorer compares the observed on-ledger and auth-server state against the signed `AuthorizedEnvelope`, never the agent's own report, which is what makes the result hard to game.
+
 ## The five ILP-specific failure modes
 
 OP-AgentBench scores whether an agent, when fed injected content, can be pushed into a money-losing failure that only exists on a real payment rail:
@@ -86,6 +109,19 @@ test/               unit + flow tests
 ## Roadmap to OP-AgentBench
 
 This reference agent is step one. The Fellowship builds it into a full benchmark: an attack dataset across three injection surfaces (tool outputs, merchant pages, message bodies), a harness that drives multiple agent/SDK adapters, a defended baseline built on [LlamaFirewall](https://arxiv.org/abs/2505.03574) plus envelope pinning, and a verify-locally public leaderboard. Everything stays Apache-2.0.
+
+```mermaid
+flowchart LR
+    A["Now, this repo:<br/>reference agent + envelope scorer"] --> B["Attack dataset<br/>5 failure modes x 3 surfaces"]
+    A --> C["Harness<br/>multi-agent / SDK adapters"]
+    B --> D["Public leaderboard<br/>+ defended baseline"]
+    C --> D
+    D --> E["OP-AgentBench v1.0<br/>Interledger Fellowship"]
+    classDef now fill:#e6f2f1,stroke:#0e7c7b,color:#0b4f4e;
+    classDef future fill:#f5f5f5,stroke:#999,color:#333;
+    class A now;
+    class B,C,D,E future;
+```
 
 ## References
 
