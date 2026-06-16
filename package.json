@@ -1,0 +1,26 @@
+{
+  "name": "op-agentbench",
+  "version": "0.1.0",
+  "description": "An Open Payments reference agent on the Interledger test network, and the seed of OP-AgentBench: a benchmark for the prompt-injection safety of AI payment agents on Open Payments / GNAP.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "author": "Aviral Kaintura",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc --noEmit -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "demo": "tsx src/index.ts demo",
+    "live": "tsx src/index.ts live",
+    "test": "node --import tsx --test test/*.test.ts"
+  },
+  "dependencies": {
+    "@interledger/open-payments": "^7.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.3",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  }
+}
