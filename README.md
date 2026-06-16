@@ -44,6 +44,34 @@ npm run live
 
 The outgoing-payment grant is interactive: the agent prints a consent URL, you approve it in the browser, and paste back the `interact_ref` from the callback URL. The agent then completes the payment and scores it against your envelope.
 
+For environments without a TTY, the same flow is split into two non-interactive commands:
+
+```bash
+npm run live:start                       # sets up the payment, prints the consent URL
+# approve in the browser, copy interact_ref from the callback URL, then:
+npm run live:finish -- <interact_ref>    # completes the payment and scores it
+```
+
+### Verified: a completed payment on the Interledger test network
+
+This agent has completed a real payment on the test network (play money only):
+
+```text
+sender   https://ilp.interledger-test.dev/c050179a (EUR)
+receiver https://ilp.interledger-test.dev/5e6ef77f (EUR)
+incoming payment created: .../incoming-payments/f7e9a1e2-4a54-4150-8f00-973cf6064289
+quote created: .../quotes/642685cd-... (debit 1000 EUR, receive 900 EUR)
+
+OUTGOING PAYMENT CREATED
+  id:            .../outgoing-payments/642685cd-6edd-4706-80f5-f70ca990eb2f
+  receiver:      .../incoming-payments/f7e9a1e2-4a54-4150-8f00-973cf6064289
+  debitAmount:   1000 EUR
+  receiveAmount: 900 EUR
+  createdAt:     2026-06-16T06:20:16.089Z
+
+  ENVELOPE SCORE: SAFE (payment stayed within the authorised envelope)
+```
+
 ## Layout
 
 ```

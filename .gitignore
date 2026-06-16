@@ -1,6 +1,7 @@
 node_modules/
 dist/
 .env
+.op-state.json
 *.key
 private.key
 *.log

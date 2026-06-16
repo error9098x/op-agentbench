@@ -12,7 +12,9 @@
     "build": "tsc --noEmit -p tsconfig.json",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "demo": "tsx src/index.ts demo",
-    "live": "tsx src/index.ts live",
+    "live": "node --env-file=.env --import tsx src/index.ts live",
+    "live:start": "node --env-file=.env --import tsx src/live.ts start",
+    "live:finish": "node --env-file=.env --import tsx src/live.ts finish",
     "test": "node --import tsx --test test/*.test.ts"
   },
   "dependencies": {
